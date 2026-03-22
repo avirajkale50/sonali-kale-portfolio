@@ -1,0 +1,113 @@
+/* ── Google Fonts ──────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  /* Emerald accent – matches reference portfolio */
+  --color-accent-50: #ecfdf5;
+  --color-accent-100: #d1fae5;
+  --color-accent-200: #a7f3d0;
+  --color-accent-300: #6ee7b7;
+  --color-accent-400: #34d399;
+  --color-accent-500: #10b981;
+  --color-accent-600: #059669;
+  --color-accent-700: #047857;
+
+  /* Neutral palette */
+  --color-ink-50:  #f9fafb;
+  --color-ink-100: #f3f4f6;
+  --color-ink-200: #e5e7eb;
+  --color-ink-300: #d1d5db;
+  --color-ink-400: #9ca3af;
+  --color-ink-500: #6b7280;
+  --color-ink-600: #4b5563;
+  --color-ink-700: #374151;
+  --color-ink-800: #1f2937;
+  --color-ink-900: #111827;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────── */
+@layer base {
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Poppins", sans-serif;
+    @apply bg-white text-ink-900 antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-black text-ink-900 leading-tight tracking-tight;
+  }
+}
+
+/* ── Reusable Components ───────────────────────────────────────────────── */
+@layer components {
+
+  /* Pill badge shown next to hero name */
+  .pill-badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ink-200 text-ink-600 text-sm font-semibold bg-white;
+  }
+
+  /* Primary CTA – filled black */
+  .btn-cta {
+    @apply inline-flex items-center gap-2 px-7 py-3.5 bg-ink-900 text-white font-bold rounded-xl
+           hover:bg-ink-700 active:scale-95 transition-all duration-200 border border-transparent;
+  }
+
+  /* Secondary CTA – ghost */
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-7 py-3.5 text-ink-700 font-bold rounded-xl
+           hover:bg-ink-100 active:scale-95 transition-all duration-200 border border-transparent;
+  }
+
+  /* Accent button */
+  .btn-accent {
+    @apply inline-flex items-center gap-2 px-7 py-3.5 bg-accent-500 text-white font-bold rounded-xl
+           hover:bg-accent-600 active:scale-95 transition-all duration-200;
+  }
+
+  /* Clean card */
+  .card {
+    @apply bg-white border-2 border-ink-100 rounded-2xl
+           hover:border-accent-300 transition-all duration-300;
+  }
+
+  /* Section header pattern */
+  .section-badge {
+    @apply inline-block text-accent-600 text-xs font-black uppercase tracking-[0.2em] mb-4;
+  }
+
+  /* Nav link */
+  .nav-link {
+    @apply text-ink-500 font-semibold text-sm hover:text-ink-900 transition-colors px-3 py-2 rounded-lg hover:bg-ink-50;
+  }
+  .nav-link-active {
+    @apply text-accent-600 font-bold;
+  }
+}
+
+/* ── Animations ────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes blob {
+  0%,100% { border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; }
+  50%      { border-radius: 30% 60% 70% 40%/50% 60% 30% 60%; }
+}
+
+.animate-up       { animation: fadeUp 0.7s ease both; }
+.animate-in       { animation: fadeIn 0.5s ease both; }
+.animate-blob     { animation: blob 8s ease-in-out infinite; }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
