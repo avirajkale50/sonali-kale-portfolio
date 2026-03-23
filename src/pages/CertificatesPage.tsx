@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCertificates } from '../hooks/useData';
 import Loading from '../components/common/Loading';
 import ErrorMessage from '../components/common/ErrorMessage';
@@ -6,6 +6,16 @@ import { resolveMediaUrl } from '../lib/utils';
 
 const CertificatesPage: React.FC = () => {
     const { data: certificates, isLoading, error, refetch } = useCertificates();
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+    // Close on Escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setSelectedImage(null);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     if (isLoading) return <Loading />;
     if (error) return <ErrorMessage onRetry={() => refetch()} />;
@@ -29,8 +39,15 @@ const CertificatesPage: React.FC = () => {
                 ) : (
                     <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
                         {certificates?.map((cert, i) => (
-                            <div key={cert._id} className="card group overflow-hidden break-inside-avoid animate-up" style={{ animationDelay: `${i * 100}ms` }}>
-                                <div className="overflow-hidden bg-ink-50 relative">
+                            <div 
+                                key={cert._id} 
+                                className="card group overflow-hidden break-inside-avoid animate-up !rounded-xl" 
+                                style={{ animationDelay: `${i * 100}ms` }}
+                            >
+                                <div 
+                                    className="overflow-hidden bg-ink-50 relative cursor-pointer"
+                                    onClick={() => setSelectedImage(resolveMediaUrl(cert.image_url) || null)}
+                                >
                                     <img 
                                         src={resolveMediaUrl(cert.image_url)} 
                                         alt={cert.title}
@@ -43,6 +60,7 @@ const CertificatesPage: React.FC = () => {
                                                 target="_blank" 
                                                 rel="noopener noreferrer"
                                                 className="btn-accent"
+                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 Verify Credential
                                             </a>
@@ -63,6 +81,30 @@ const CertificatesPage: React.FC = () => {
                     </div>
                 )}
             </div>
+
+            {/* Image Popup Modal */}
+            {selectedImage && (
+                <div 
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-10 bg-black/80 animate-in"
+                    onClick={() => setSelectedImage(null)}
+                >
+                    <button 
+                        className="absolute top-6 right-6 text-white text-3xl hover:text-accent-400 z-10 cursor-pointer"
+                        onClick={() => setSelectedImage(null)}
+                        aria-label="Close modal"
+                    >
+                        ✕
+                    </button>
+                    <div className="relative max-w-full max-h-full flex items-center justify-center">
+                        <img 
+                            src={selectedImage} 
+                            alt="Certificate Full View" 
+                            className="max-w-full max-h-[90vh] object-contain rounded-sm shadow-2xl animate-up"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
